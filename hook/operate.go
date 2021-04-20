@@ -33,16 +33,16 @@ func createAddLabelPatch(availableLabels map[string]string, labels map[string]st
 
 
 func updateLabels(target map[string]string, added map[string]string) (patch []patchOperation) {
-	values := make(map[string]string)
+	if target == nil {
+		target = make(map[string]string)
+	}
 	for key, value := range added {
-		if target == nil || target[key] == "" {
-			values[key] = value
-		}
+		target[key] = value
 	}
 	patch = append(patch, patchOperation{
 		Op:    "add",
 		Path:  "/metadata/labels",
-		Value: values,
+		Value: target,
 	})
 	return patch
 }

@@ -21,8 +21,8 @@ kubectl create -f deployment/mutatingwebhook-ca-bundle.yaml -n jiexun-test
 
 5.设置namespace标签 namespaceSelector
 
-kubectl label namespace jiexun-test jiexun-test-key=jiexun
-kubectl label namespace jiexun-test jiexun-test-key-
+kubectl label namespace jiexun-test1 monitoring-platform-access1=jiexun
+kubectl label namespace jiexun-test1 monitoring-platform-access1-
 
 6.测试Mutating回调
 kubectl create -f deployment/test-secret.yaml

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: label-customizers-deployment
+  labels:
+    app: label-customizers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: label-customizers
+  template:
+    metadata:
+      labels:
+        app: label-customizers
+    spec:
+      serviceAccount: default
+      containers:
+        - name: label-customizers
+          image: daocloud.io/daocloud/label-customizers:latest
+          imagePullPolicy: Always
+          args:
+            - -tlsCertFile=/etc/webhook/certs/cert.pem
+            - -tlsKeyFile=/etc/webhook/certs/key.pem
+            - -alsologtostderr
+            - -v=4
+            - 2>&1
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /etc/webhook/certs
+              readOnly: true
+      volumes:
+        - name: webhook-certs
+          secret:
+            secretName: label-customizers-certs

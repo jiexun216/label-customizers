@@ -1,0 +1,26 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: mutating-webhook-label-customizers-cfg
+  labels:
+    app: label-customizers
+webhooks:
+  - name: mutating-label-customizers.datacreating.com
+    clientConfig:
+      service:
+        name: label-customizers-svc
+        namespace: jiexun-test
+        path: "/mutate"
+      caBundle: ${CA_BUNDLE}
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: ["*"]
+        apiVersions: ["*"]
+        resources: ["*"]
+        scope: "Namespaced"
+    namespaceSelector:
+      matchExpressions:
+        # key exist
+        - key: monitoring-platform-access1
+          operator: Exists
+    timeoutSeconds: 5

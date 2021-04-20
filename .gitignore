@@ -15,5 +15,5 @@
 # vendor/
 /certs/
 /shell/
-/deployment/mod-ns-secret.sh
+/deployment/doc.txt
 /deployment/mutatingwebhook-ca-bundle.yaml

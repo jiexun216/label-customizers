@@ -41,10 +41,8 @@ func updateLabels(target map[string]string, added map[string]string) (patch []pa
 	}
 	patch = append(patch, patchOperation{
 		Op:    "add",
-		//Path:  "/metadata/labels",
-		Path:  "/metadata/labels/dce.daocloud.io~1app",
-		//Value: target,
-		Value: "cloudera-cdp-console",
+		Path:  "/metadata/labels",
+		Value: target,
 	})
 	return patch
 }

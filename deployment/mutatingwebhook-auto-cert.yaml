@@ -2,16 +2,17 @@ apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
   name: mutating-webhook-label-customizers-cfg
+  annotations:
+    cert-manager.io/inject-ca-from: cdp-customizer/label-customizers-webhook-cert
   labels:
     app: label-customizers
 webhooks:
   - name: mutating-label-customizers.datacreating.com
     clientConfig:
       service:
-        name: label-customizers-svc
-        namespace: jiexun-test
+        name: label-customizers-admission-service
+        namespace: cdp-customizer
         path: "/mutate"
-      caBundle: ${CA_BUNDLE}
     rules:
       - operations: ["CREATE"]
         apiGroups: ["*"]

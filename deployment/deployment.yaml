@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: label-customizers-deployment
+  name: label-customizers-admission-mamager
   labels:
     app: label-customizers
 spec:
@@ -20,8 +20,8 @@ spec:
           image: daocloud.io/daocloud/label-customizers:latest
           imagePullPolicy: Always
           args:
-            - -tlsCertFile=/etc/webhook/certs/cert.pem
-            - -tlsKeyFile=/etc/webhook/certs/key.pem
+            - -tlsCertFile=/etc/webhook/certs/tls.crt
+            - -tlsKeyFile=/etc/webhook/certs/tls.key
             - -alsologtostderr
             - -v=4
             - 2>&1
@@ -32,4 +32,22 @@ spec:
       volumes:
         - name: webhook-certs
           secret:
-            secretName: label-customizers-certs
+            secretName: label-customizers-admission-mamager-certs
+      ## By DaoCloud
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/master
+                    operator: Exists
+                  - key: kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+      tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+      ##

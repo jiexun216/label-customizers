@@ -1,0 +1,26 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: label-customizers-webhook-cert
+  namespace: cdp-customizer
+spec:
+  secretName: label-customizers-admission-mamager-certs
+  subject:
+    organizations:
+      - dce
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+  dnsNames:
+    - label-customizers-admission-service
+    - label-customizers-admission-service.cdp-customizer
+    - label-customizers-admission-service.cdp-customizer.svc
+    - label-customizers-admission-service.cdp-customizer.svc.cluster.local
+  ipAddresses:
+    - 127.0.0.1
+  issuerRef:
+    name: k8s-ca-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
